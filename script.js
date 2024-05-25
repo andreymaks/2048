@@ -16,6 +16,7 @@ const colors = [
 const cellsNL = document.querySelectorAll('.cell');
 const cells = Array.from(cellsNL);
 let freeCells = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+const score = document.getElementById('score');
 // console.log(cells);
 // cells.forEach((el, i) => {
 //   console.log('here');
@@ -81,9 +82,11 @@ const moveToSameCell = function (currentCellIndex, sameCellIndex, cells) {
     if (
       cells[currentCellIndex].textContent === cells[sameCellIndex].textContent
     ) {
+      const number = Number(cells[sameCellIndex].textContent) * 2;
       const newCellIndex = calculateIndex(cells[sameCellIndex].classList);
       const oldCellIndex = calculateIndex(cells[currentCellIndex].classList);
-      occupyCell(Number(cells[sameCellIndex].textContent) * 2, newCellIndex);
+      score.textContent = Number(score.textContent) + number;
+      occupyCell(number, newCellIndex);
       freeCell(oldCellIndex);
       currentCellIndex = sameCellIndex;
       sameCellIndex--;
