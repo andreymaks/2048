@@ -41,3 +41,33 @@
   font-size: 24px;
   font-weight: bold;
 }
+
+.hidden {
+  display: none;
+}
+
+.lose-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10%;
+
+  background-color: white;
+  padding: 6rem;
+  border-radius: 10px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.restart {
+  position: block;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  border: none;
+  background-color: blue;
+  border-radius: 5px;
+  margin: 40px auto 0 auto;
+  padding: 10px 20px;
+}

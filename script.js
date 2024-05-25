@@ -14,6 +14,9 @@ const colors = [
   '#12FEBF',
 ];
 const cellsNL = document.querySelectorAll('.cell');
+const btnRestart = document.querySelectorAll('.restart');
+const loseWindow = document.querySelector('.lose-window');
+const loseScore = document.getElementById('score-lose');
 const cells = Array.from(cellsNL);
 let freeCells = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 const score = document.getElementById('score');
@@ -134,15 +137,31 @@ const checkLine = function (cellsLine) {
   });
 };
 
-const randomCell = addRandomCell();
+const checkMovements = function () {
+  return cells.some((el, i) => {
+    const rowIndex = i % 4;
+    const columnIndex = Math.floor(i / 4);
+    if (rowIndex < 3 && el.textContent === cells[i + 1].textContent)
+      return true;
+    if (columnIndex < 3 && el.textContent === cells[i + 4].textContent)
+      return true;
+    return false;
+  });
+};
 
 const arrowMovement = function (getLine, reversed) {
+  console.log(checkMovements());
+  if (freeCells.length === 0 && !checkMovements()) {
+    loseScore.textContent = score.textContent;
+    loseWindow.classList.remove('hidden');
+    return;
+  }
   for (let i = 0; i < GRID_SIZE; i++) {
     let cellsLine;
     reversed ? (cellsLine = getLine(i).reverse()) : (cellsLine = getLine(i));
     checkLine(cellsLine);
   }
-  addRandomCell();
+  if (freeCells.length !== 0) addRandomCell();
 };
 
 document.addEventListener('keydown', function (e) {
@@ -164,3 +183,19 @@ document.addEventListener('keydown', function (e) {
       break;
   }
 });
+
+const restart = function () {
+  freeCells = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  cells.forEach((_, i) => {
+    cells[i].textContent = '';
+    cells[i].classList.replace('occupied', 'free');
+    cells[i].style.backgroundColor = '';
+  });
+  score.textContent = '0';
+  loseWindow.classList.add('hidden');
+  addRandomCell();
+};
+
+btnRestart.forEach(btn => btn.addEventListener('click', restart));
+
+const randomCell = addRandomCell();
