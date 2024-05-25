@@ -70,9 +70,17 @@ const findFirstFreeCell = function (cells, index) {
 };
 
 const findSameCellIndex = function (cells, index, number) {
-  return cells
+  const indexSame = cells
     .slice(0, index)
     .findLastIndex(el => Number(el.textContent) === number);
+  if (
+    indexSame >= 0 &&
+    cells
+      .slice(indexSame + 1, index)
+      .some(el => el.classList.contains('occupied'))
+  )
+    return -1;
+  return indexSame;
 };
 
 const moveToFreeCell = function (oldCellIndex, newCellIndex, number) {
@@ -118,13 +126,15 @@ const moveCell = function (el, index, cellsLine) {
   const currentCellIndex = calculateIndex(el.classList);
   if (freeCell && sameCellIndex >= 0) {
     const freeCellIndex = calculateIndex(freeCell.classList);
-    freeCellIndex < sameCellIndex
+    console.log(`free cell ${freeCellIndex % 4} sameCell ${sameCellIndex}`);
+    freeCellIndex % 4 < sameCellIndex
       ? moveToFreeCell(currentCellIndex, freeCellIndex, number)
       : moveToSameCell(index, sameCellIndex, cellsLine);
   } else if (freeCell) {
     const freeCellIndex = calculateIndex(freeCell.classList);
     moveToFreeCell(currentCellIndex, freeCellIndex, number);
   } else if (sameCellIndex >= 0) {
+    console.log(sameCellIndex);
     moveToSameCell(index, sameCellIndex, cellsLine);
   }
 };
@@ -150,7 +160,6 @@ const checkMovements = function () {
 };
 
 const arrowMovement = function (getLine, reversed) {
-  console.log(checkMovements());
   if (freeCells.length === 0 && !checkMovements()) {
     loseScore.textContent = score.textContent;
     loseWindow.classList.remove('hidden');
